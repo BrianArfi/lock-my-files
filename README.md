@@ -36,3 +36,9 @@ phone. Do not put anything in it that you cannot afford to lose.
 
 Verify your download against the SHA-256 published with the release before
 installing it.
+
+## Changelog
+
+What changed in each release is in [CHANGELOG.md](CHANGELOG.md). Each
+[release](https://github.com/BrianArfi/lock-my-files/releases) also carries its
+own notes and the SHA-256 of its download.
