@@ -2,17 +2,13 @@
 
 **A locked folder on your phone that only your password opens.**
 
-Put photos, documents and videos into a vault. Each file is encrypted on the way in, and its name is encrypted too. Nothing leaves the phone, and nobody can reset the password for you.
+Put photos, documents and videos into a vault. Each file is encrypted on the way in, and its name is encrypted too. The app cannot connect to the internet, and a file leaves the vault only when you save a copy out. Nobody can reset the password for you.
 
 [![License: not open source](https://img.shields.io/badge/license-not%20open%20source-lightgrey.svg)](#license)
 [![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-green.svg)](CHANGELOG.md)
 [![Made for Android 7+](https://img.shields.io/badge/made%20for-Android%207%2B-3DDC84.svg)](#requirements)
 
 **[Download the Android app (APK)](https://github.com/BrianArfi/lock-my-files/releases/latest)**
-
-<img src="docs/lock-screen.png" width="270" alt="The app's lock screen on an Android phone: a dark screen with a keyhole icon, the heading Enter passcode, six empty dots, and a round number pad from 0 to 9 with a delete key">
-
-*The lock screen, from a later build of the app. Later builds carry the new name SealKeep. The 0.1.0 download here shows the name Lock My Files, and its screens can look different.*
 
 ## Your phone holds more than it used to
 
@@ -80,7 +76,7 @@ flowchart LR
 | Vaults | As many vaults as you like, each with its own password | Keeping work papers and personal photos apart |
 | Recovery words | 12 words per vault that open it if you forget the password | A paper backup of the password, kept somewhere safe |
 | Per-file password | A second password on one file. The vault password and the recovery words cannot open it | The one document that needs more than the vault |
-| Encrypted file names | Names, types and sizes are inside the encrypted data | Files whose name alone says too much |
+| Encrypted file names | Names and file types are inside the encrypted data. File size and date are stored in the clear | Files whose name alone says too much |
 | In-app viewer | Photos, text, video and audio open inside the app | Looking at a file without sharing it to another app |
 | Save a copy out | Decrypts one file and hands it to the share sheet | Sending a document when you choose to |
 | Auto-lock and screen protection | Locks 30 seconds after you switch away. Blocks screenshots and hides the app in the recent apps view | Leaving the phone on a table without worry |
@@ -112,7 +108,7 @@ Before you put real files in, make a vault called "Test" and add a file you do n
 - **Files are encrypted with XChaCha20-Poly1305**, in 1 MiB chunks. Each file has its own key.
 - **No password verifier is stored.** There is nothing on the phone to test a guess against. The only way to test a password is the full key derivation.
 - **A per-file password replaces the vault key for that file.** So the vault password and the recovery words do not open it.
-- **No master key and no escrow.** Nobody, including the developer, can open a vault without the password or the recovery words.
+- **No backdoor key and no escrow.** Nobody, including the developer, can open a vault without the password or the recovery words.
 
 ## What it does not do
 
@@ -121,6 +117,8 @@ Before you put real files in, make a vault called "Test" and add a file you do n
 - **The original file stays where it was.** Adding a file copies it. Delete the original yourself.
 - **Video and audio write a temporary copy.** The player needs a real file, so a decrypted copy sits in the app's private storage while it plays. The app deletes it when you close the file, when the vault locks, and at every launch. Photos and text open in memory only.
 - **The vault name is not encrypted.** The app has to list vaults before any of them is open. Use a plain name like "Documents".
+- **File size and date are not encrypted.** Names and file types are inside the encrypted data. File size and date are stored in the clear.
+- **Wrong guesses are not rate-limited in 0.1.0.** Nothing slows down repeated wrong guesses at the passcode or a vault password. Pick a vault password that is long and hard to guess.
 
 ## Status
 
