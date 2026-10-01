@@ -21,6 +21,10 @@ Your ID scans, contracts and private photos sit in the gallery and the cloud, ne
 - **Opens files inside the app.** Photos, text, video and audio open in the vault, without another app.
 - **Gives you 12 recovery words per vault**, for the day you forget the password.
 
+![Three phone screens from the app. A vault called Dokumen penting asks for its password. Unlocked, it lists a house certificate scan, a diploma, a sunrise photo, a rental contract and an ID card, each with its size. The sunrise photo opens inside the app, with buttons to save a copy outside the vault or give the file its own password](docs/screens.png)
+
+*Real screens from the current development build, with sample files. A few controls, such as adding files without unlocking, arrive after v0.1.0.*
+
 ## Quick start
 
 > **Early build.** v0.1.0 is not yet tested on a real phone, so keep a copy of anything important elsewhere. The source is not public yet; the APK is free to use.
