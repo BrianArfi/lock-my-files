@@ -10,6 +10,8 @@ Source is not public yet. The APK is free to use.
 [![GitHub stars](https://img.shields.io/github/stars/BrianArfi/lock-my-files?style=social)](https://github.com/BrianArfi/lock-my-files/stargazers)
 [![Made for Android 7+](https://img.shields.io/badge/made%20for-Android%207%2B-3DDC84.svg)](docs/install.md#requirements)
 
+<img src="docs/hero.png" width="880" alt="An ID card and a signed rental contract go into a phone vault called Documents, which lists them next to a passport scan and a bank statement. Below it, the storage shows only scrambled .enc file names. Headline: Your private files, locked away.">
+
 **[Download the Android app (APK)](https://github.com/BrianArfi/lock-my-files/releases/latest)**
 
 **Early build, not yet tested on a real phone. Keep a copy of anything important elsewhere.**

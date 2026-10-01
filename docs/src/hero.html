@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lock My Files hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Shared family palette */
+  :root {
+    --paper: #F1F3EE; --field: #0D453E; --ink: #072B27; --signal: #C8F751;
+    /* Lock My Files app palette, from the app's theme */
+    --app-bg: #0B0D10; --app-surface: #16191F; --app-raised: #1E222A; --app-border: #272C36;
+    --app-text: #F5F7FA; --app-muted: #8A92A0; --app-accent: #4C8DFF; --app-success: #3DDC97;
+    --head: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1600px; height: 800px; }
+  body { background: var(--paper); font-family: var(--body); color: var(--ink); position: relative; overflow: hidden; }
+
+  .grid { position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(7,43,39,.10) 1.2px, transparent 1.3px);
+    background-size: 28px 28px; }
+
+  /* Left: headline */
+  .copy { position: absolute; left: 88px; top: 112px; width: 660px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 12px; font: 600 18px/1 var(--mono);
+    letter-spacing: .08em; text-transform: uppercase; color: var(--field); }
+  .eyebrow .dot { width: 12px; height: 12px; border-radius: 3px; background: var(--signal); outline: 2px solid var(--ink); }
+  h1 { margin-top: 26px; font: 900 94px/0.97 var(--head); letter-spacing: -0.025em; color: var(--ink); }
+  h1 mark { background: linear-gradient(transparent 56%, var(--signal) 56%, var(--signal) 90%, transparent 90%); color: inherit; padding: 0 6px; margin: 0 -6px; }
+  .chips { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; }
+  .chip { display: inline-flex; align-items: center; gap: 14px; font: 600 24px/1 var(--body); color: var(--ink); }
+  .chip i { flex: none; width: 38px; height: 38px; border-radius: 10px; background: var(--field); display: grid; place-items: center; }
+  .chip i svg { width: 20px; height: 20px; }
+
+  /* Middle: documents going in */
+  .doc { position: absolute; background: #fff; border: 2.5px solid var(--ink); border-radius: 14px; box-shadow: 8px 8px 0 var(--ink); }
+  .idcard { left: 735px; top: 120px; width: 300px; height: 190px; transform: rotate(-7deg); padding: 18px 20px; }
+  .idcard .band { height: 18px; border-radius: 6px; background: var(--field); width: 60%; }
+  .idcard .row { display: flex; gap: 18px; margin-top: 18px; }
+  .idcard .photo { width: 84px; height: 104px; border-radius: 8px; background: #dfe4da; position: relative; overflow: hidden; border: 2px solid var(--ink); }
+  .idcard .photo::before { content: ""; position: absolute; left: 24px; top: 16px; width: 32px; height: 32px; border-radius: 50%; background: var(--field); }
+  .idcard .photo::after { content: ""; position: absolute; left: 10px; top: 56px; width: 60px; height: 60px; border-radius: 50%; background: var(--field); }
+  .lines { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }
+  .lines b { display: block; height: 10px; border-radius: 5px; background: #c9d0c4; }
+  .idcard .tag { position: absolute; right: 16px; bottom: 14px; font: 600 14px/1 var(--mono); color: var(--field); }
+
+  .contract { left: 770px; top: 350px; width: 232px; height: 290px; transform: rotate(6deg); padding: 24px 22px; }
+  .contract h4 { font: 800 21px/1 var(--head); color: var(--ink); letter-spacing: -.01em; }
+  .contract .lines { margin-top: 18px; gap: 11px; }
+  .contract .sig { position: absolute; left: 22px; right: 22px; bottom: 26px; border-top: 2px solid var(--ink); padding-top: 8px; font: 500 13px/1 var(--mono); color: #5a6b65; }
+  .contract .scrawl { position: absolute; left: 28px; bottom: 42px; }
+
+  .arrow { position: absolute; left: 1010px; top: 285px; }
+
+  /* Right: phone with the vault screen */
+  .phone { position: absolute; left: 1140px; top: 34px; width: 380px; height: 790px; border-radius: 56px; background: var(--ink); padding: 14px; box-shadow: 14px 14px 0 rgba(7,43,39,.18); }
+  .screen { width: 100%; height: 100%; border-radius: 44px; background: var(--app-bg); overflow: hidden; position: relative; padding: 60px 22px 0; }
+  .notch { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); width: 92px; height: 26px; border-radius: 14px; background: #000; }
+  .status { position: absolute; left: 30px; right: 30px; top: 20px; display: flex; justify-content: space-between; font: 600 14px/1 var(--body); color: var(--app-text); }
+  .titlerow { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .titlerow h2 { font: 700 30px/1.1 var(--body); color: var(--app-text); }
+  .pill { padding: 9px 16px; border-radius: 999px; background: var(--app-raised); font: 600 15px/1 var(--body); color: var(--app-text); }
+  .sub { margin-top: 6px; font: 400 14px/1.3 var(--body); color: var(--app-muted); }
+  .card { margin-top: 12px; background: var(--app-surface); border: 1px solid var(--app-border); border-radius: 16px; padding: 15px 16px; display: flex; align-items: center; gap: 12px; }
+  .card.new { border-color: var(--signal); box-shadow: 0 0 0 3px rgba(200,247,81,.22); }
+  .thumb { flex: none; width: 40px; height: 40px; border-radius: 10px; background: var(--app-raised); display: grid; place-items: center; }
+  .thumb svg { width: 22px; height: 22px; }
+  .ft { flex: 1; min-width: 0; }
+  .fn { font: 500 16px/1.25 var(--body); color: var(--app-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fm { font: 400 13px/1.3 var(--body); color: var(--app-muted); }
+  .btn { margin-top: 18px; height: 52px; border-radius: 12px; background: var(--app-accent); color: #fff; font: 600 16px/52px var(--body); text-align: center; }
+
+  /* What any other app sees on the storage */
+  .disk { position: absolute; left: 1010px; top: 600px; width: 330px; background: var(--ink); border-radius: 16px; padding: 16px 18px 16px; color: #d8e6df; font: 400 15px/1.65 var(--mono); box-shadow: 8px 8px 0 rgba(7,43,39,.25); border: 2px solid var(--signal); }
+  .disk .hd { display: flex; justify-content: space-between; align-items: center; font: 600 13px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--signal); margin-bottom: 10px; }
+  .disk .hd span:last-child { color: #8fb3a8; text-transform: none; letter-spacing: 0; }
+  .disk .f { white-space: nowrap; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <div class="copy">
+    <div class="eyebrow"><span class="dot"></span>Lock My Files &middot; Android</div>
+    <h1>Your private files, <mark>locked</mark> away.</h1>
+    <div class="chips">
+      <div class="chip"><i><svg viewBox="0 0 24 24" fill="none" stroke="#C8F751" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></i>Encrypted on your phone</div>
+      <div class="chip"><i><svg viewBox="0 0 24 24" fill="none" stroke="#C8F751" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c5 0 9 4.5 10 7a14 14 0 0 1-3 4.2M6.6 6.6A14 14 0 0 0 2 12c1 2.5 5 7 10 7a9.9 9.9 0 0 0 4.4-1"/></svg></i>File names hidden too</div>
+      <div class="chip"><i><svg viewBox="0 0 24 24" fill="none" stroke="#C8F751" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M5.5 12.5a10 10 0 0 1 13 0"/><path d="M9 16.2a5 5 0 0 1 6 0"/><path d="M3 3l18 18"/></svg></i>No internet permission</div>
+    </div>
+  </div>
+
+  <!-- Documents going in -->
+  <div class="doc idcard">
+    <div class="band"></div>
+    <div class="row">
+      <div class="photo"></div>
+      <div class="lines"><b style="width:90%"></b><b style="width:70%"></b><b style="width:82%"></b><b style="width:55%"></b></div>
+    </div>
+    <div class="tag">ID CARD</div>
+  </div>
+
+  <div class="doc contract">
+    <h4>Rental contract</h4>
+    <div class="lines">
+      <b></b><b style="width:92%"></b><b style="width:96%"></b><b style="width:78%"></b><b></b><b style="width:88%"></b><b style="width:60%"></b>
+    </div>
+    <svg class="scrawl" width="120" height="34" viewBox="0 0 120 34" fill="none" stroke="#0D453E" stroke-width="3" stroke-linecap="round"><path d="M4 26c10-18 18-22 20-12s-6 14 2 6 14-16 18-8-2 12 6 6 10-10 16-4 8 6 14-2 12-6 20-2"/></svg>
+    <div class="sig">Signed, Dina</div>
+  </div>
+
+  <svg class="arrow" width="120" height="120" viewBox="0 0 120 120" fill="none">
+    <path d="M10 60 H96" stroke="#072B27" stroke-width="24" stroke-linecap="round"/>
+    <path d="M10 60 H96" stroke="#C8F751" stroke-width="14" stroke-linecap="round"/>
+    <path d="M72 30 L104 60 L72 90" stroke="#072B27" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M72 30 L104 60 L72 90" stroke="#C8F751" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <!-- Phone: a vault screen, drawn from the app's own layout and colours -->
+  <div class="phone">
+    <div class="screen">
+      <div class="status"><span>9:41</span><span>100%</span></div>
+      <div class="notch"></div>
+      <div class="titlerow"><h2>Documents</h2><span class="pill">Lock</span></div>
+      <div class="sub">Only this vault's password opens it.</div>
+
+      <div class="card new">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#C8F751" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><circle cx="8.5" cy="11" r="2.2"/><path d="M5.5 16.5c.6-1.8 1.8-2.6 3-2.6s2.4.8 3 2.6M14 10h4.5M14 13.5h3"/></svg></div>
+        <div class="ft"><div class="fn">id-card-front.jpg</div><div class="fm">1.8 MB</div></div>
+      </div>
+      <div class="card new">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#C8F751" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M14 2.5V7h4.5M9 12h6M9 15.5h6M9 19h3"/></svg></div>
+        <div class="ft"><div class="fn">rental-contract.pdf</div><div class="fm">640 KB</div></div>
+      </div>
+      <div class="card">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#8A92A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M6 2.5h8l4.5 4.5v14.5H6z"/><path d="M14 2.5V7h4.5"/></svg></div>
+        <div class="ft"><div class="fn">passport-scan.jpg</div><div class="fm">2.4 MB</div></div>
+      </div>
+      <div class="card">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#8A92A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div>
+        <div class="ft"><div class="fn">bank-statement.png</div><div class="fm">910 KB</div></div>
+      </div>
+      <div class="btn">Add files</div>
+    </div>
+  </div>
+
+  <div class="disk">
+    <div class="hd"><span>On the storage</span><span>vaults/</span></div>
+    <div class="f">3f9c2a71-8be4.enc</div>
+    <div class="f">b07d55e2-1c9a.enc</div>
+    <div class="f">e41a0c8f-77d3.enc</div>
+  </div>
+</body>
+</html>
