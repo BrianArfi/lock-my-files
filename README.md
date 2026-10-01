@@ -4,12 +4,15 @@
 
 **Keep your ID cards, contracts and private photos out of the gallery, locked behind a password only you know.**
 
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+Source is not public yet. The APK is free to use.
+
 [![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-green.svg)](CHANGELOG.md)
 [![GitHub stars](https://img.shields.io/github/stars/BrianArfi/lock-my-files?style=social)](https://github.com/BrianArfi/lock-my-files/stargazers)
 [![Made for Android 7+](https://img.shields.io/badge/made%20for-Android%207%2B-3DDC84.svg)](docs/install.md#requirements)
 
 **[Download the Android app (APK)](https://github.com/BrianArfi/lock-my-files/releases/latest)**
+
+**Early build, not yet tested on a real phone. Keep a copy of anything important elsewhere.**
 
 </div>
 
@@ -21,18 +24,16 @@ Your ID scans, contracts and private photos sit in the gallery and the cloud, ne
 
 - **Locks files in a vault.** Each vault has its own password, and each file is encrypted on the way in.
 - **Hides the file names too.** `passport-scan.jpg` is not readable on the storage.
-- **Never uploads anything.** The app has no internet permission, so Android does not let it connect.
+- **v0.1.0 has no internet permission**, so Android does not let it connect. Check it in App info, Permissions.
 - **Opens files inside the app.** Photos, text, video and audio open in the vault, without another app.
 - **Gives you 12 recovery words per vault**, for the day you forget the password.
 
 ## Quick start
 
-1. Download `lock-my-files-0.1.0.apk` from the [latest release](https://github.com/BrianArfi/lock-my-files/releases/latest).
-2. Check it against the SHA-256 in the release notes, then install it on the phone:
-   ```bash
-   shasum -a 256 lock-my-files-0.1.0.apk    # or on Windows: certutil -hashfile lock-my-files-0.1.0.apk SHA256
-   ```
-3. Set a six-digit app passcode, make a vault, write down its 12 recovery words, and add your first file.
+1. On your phone, download `lock-my-files-0.1.0.apk` from the [latest release](https://github.com/BrianArfi/lock-my-files/releases/latest).
+2. Allow "Install unknown apps" for your browser when Android asks.
+3. Optional: check the SHA-256 on a computer (command in [docs/install.md](docs/install.md#steps)).
+4. Set a six-digit app passcode, make a vault, write down its 12 recovery words, and add your first file.
 
 ## Example
 
@@ -40,9 +41,7 @@ Your ID scans, contracts and private photos sit in the gallery and the cloud, ne
 | :--- | :--- |
 | A passport scan in the camera roll, next to holiday photos | The scan in a vault called "Documents", encrypted, name included |
 | Any app with storage access can read the file name | The file name is encrypted with the file |
-| "Is this app uploading my files?" | No internet permission, so no upload is possible |
-
-> **Version 0.1.0 has not been run on a real Android phone yet.** Keep a copy of anything important somewhere else until a tested build is out. See [Status](#status).
+| "Is this app uploading my files?" | v0.1.0 has no internet permission, so no upload is possible |
 
 ---
 
@@ -65,7 +64,7 @@ This repository hosts the release download. The source code is not published her
 Use the 12 recovery words for that vault. If you lost those too, the files are gone. There is no reset, because a reset would mean someone else could open your files.
 
 **How do I know it does not upload my files?**
-The app has no internet permission, so Android does not let it open a network connection. Open the app info screen on your phone and check the permissions list.
+Version 0.1.0 has no internet permission, so Android does not let it open a network connection. Open the app info screen on your phone and check the permissions list.
 
 **Is it safe to use for important files now?**
 Not yet. Version 0.1.0 has not been run on a real Android phone. Keep a copy of anything important somewhere else until a tested build is out.
