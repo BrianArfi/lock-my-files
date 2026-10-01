@@ -4,7 +4,7 @@
 
 Put photos, documents and videos into a vault. Each file is encrypted on the way in, and its name is encrypted too. The app cannot connect to the internet, and a file leaves the vault only when you save a copy out. Nobody can reset the password for you.
 
-[![License: not open source](https://img.shields.io/badge/license-not%20open%20source-lightgrey.svg)](#license)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-green.svg)](CHANGELOG.md)
 [![Made for Android 7+](https://img.shields.io/badge/made%20for-Android%207%2B-3DDC84.svg)](#requirements)
 
@@ -158,4 +158,4 @@ The full history is in [CHANGELOG.md](CHANGELOG.md). **Latest: [0.1.0] - 2026-09
 
 ## License
 
-No open-source license. The APK in the releases is free to download. The source code is not published, and this repository grants no rights to it.
+The contents of this repository are licensed under Apache-2.0: see [LICENSE](LICENSE) and [NOTICE](NOTICE). The APK in the releases is free to download. The app's source code is not published in this repository.
