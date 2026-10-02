@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lock My Files: how it works (illustration)</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* 10 s loop, rendered by render_gifs.py to docs/how-it-works.gif. Illustration of docs/how-it-works.md steps 4-6. */
+  :root { --paper:#F1F3EE; --ink:#072B27; --field:#0D453E; --signal:#C8F751; --warn:#E5484D;
+          --head:'Archivo',system-ui,sans-serif; --mono:'JetBrains Mono',Consolas,monospace; --body:'Inter',system-ui,sans-serif; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:1200px; height:620px; }
+  body { background:var(--paper); position:relative; overflow:hidden; color:var(--ink); font-family:var(--body); }
+  .grid { position:absolute; inset:0; background-image:radial-gradient(rgba(7,43,39,.10) 1.2px, transparent 1.3px); background-size:28px 28px; }
+  .top { position:absolute; left:40px; top:36px; right:40px; display:flex; justify-content:space-between; align-items:baseline; }
+  h1 { font:900 44px/1 var(--head); letter-spacing:-.02em; }
+  h1 mark { background:linear-gradient(transparent 56%, var(--signal) 56%, var(--signal) 90%, transparent 90%); color:inherit; padding:0 4px; margin:0 -4px; }
+  .cap { font:600 16px/1 var(--mono); color:#5a6b65; }
+
+  .box { position:absolute; top:130px; width:252px; height:452px; background:#fff; border:3px solid var(--ink); border-radius:16px; box-shadow:6px 6px 0 var(--ink); padding:18px 18px; }
+  .n { display:inline-grid; place-items:center; width:36px; height:36px; border-radius:9px; background:var(--signal); border:3px solid var(--ink); font:800 18px/1 var(--mono); }
+  .box h3 { margin-top:12px; font:800 25px/1.1 var(--head); letter-spacing:-.01em; }
+  .box p { position:absolute; left:18px; right:18px; bottom:18px; font:500 18px/1.38 var(--body); color:#2b4a45; }
+  .vis { position:relative; margin-top:16px; height:170px; border-radius:12px; background:#F1F3EE; border:2px solid rgba(7,43,39,.15); overflow:hidden; }
+  #b1 { left:40px; } #b2 { left:330px; } #b3 { left:620px; } #b4 { left:910px; }
+
+  .arrow { position:absolute; top:340px; width:34px; height:10px; }
+  .arrow svg { overflow:visible; }
+  #a1 { left:294px; } #a2 { left:584px; } #a3 { left:874px; }
+
+  /* visual bits */
+  .f { position:absolute; left:12px; right:12px; height:38px; border-radius:8px; background:#fff; border:2px solid var(--ink); font:600 15px/34px var(--mono); padding:0 36px 0 10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .f .ck { position:absolute; right:8px; top:7px; width:20px; height:20px; border-radius:5px; background:var(--signal); border:2px solid var(--ink); }
+  .dark { background:#0B0D10; border-color:#0B0D10; }
+  .pw { position:absolute; left:12px; right:12px; top:14px; height:38px; border-radius:8px; background:#16191F; color:#F5F7FA; font:700 20px/38px var(--mono); padding:0 12px; letter-spacing:.1em; }
+  .key { position:absolute; left:50%; top:62px; margin-left:-16px; width:32px; height:32px; }
+  .scr { position:absolute; left:12px; right:12px; top:104px; height:44px; border-radius:8px; background:#072B27; color:#dbe7e1; font:600 15px/44px var(--mono); padding:0 10px; white-space:nowrap; overflow:hidden; }
+  .scr span { position:absolute; left:10px; }
+  .tile { position:absolute; left:50%; top:16px; margin-left:-62px; width:124px; height:120px; border-radius:10px; border:2.5px solid var(--ink); background:#fff; padding:12px; }
+  .tile i { display:block; height:8px; border-radius:4px; background:#c9d0c4; margin-bottom:8px; }
+  .tile i.b { background:var(--field); width:60%; height:11px; }
+  .tile .nm { position:absolute; left:0; right:0; bottom:0; background:var(--ink); color:#fff; font:600 13px/1 var(--mono); padding:7px 8px; }
+  .strike { position:absolute; left:50%; top:20px; margin-left:-70px; width:140px; height:112px; }
+  .bin { position:absolute; left:0; right:0; bottom:8px; text-align:center; font:700 15px/1 var(--mono); color:var(--warn); }
+  .ph { position:absolute; left:50%; top:8px; margin-left:-98px; width:196px; height:180px; border-radius:18px; background:#0B0D10; border:4px solid var(--ink); padding:14px 8px; }
+  .ph .t { font:700 15px/1 var(--body); color:#F5F7FA; }
+  .ph .r { margin-top:8px; height:30px; border-radius:7px; background:#16191F; border:1.5px solid #272C36; font:500 14px/27px var(--body); text-overflow:ellipsis; color:#F5F7FA; padding:0 6px; white-space:nowrap; overflow:hidden; }
+  .ph .r.on { border-color:var(--signal); color:var(--signal); }
+  .ph .lock { position:absolute; right:8px; top:10px; font:600 12px/1 var(--body); color:#4C8DFF; background:#1E222A; padding:4px 6px; border-radius:999px; }
+
+  /* timing: 10 s clock */
+  .a { animation-duration:10s; animation-iteration-count:1; animation-fill-mode:both; animation-timing-function:ease-out; }
+  @keyframes boxIn1 { 0%, 3% { opacity:0; transform:translateY(24px); } 7%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  @keyframes boxIn2 { 0%, 21% { opacity:0; transform:translateY(24px); } 25%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  @keyframes boxIn3 { 0%, 43% { opacity:0; transform:translateY(24px); } 47%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  @keyframes boxIn4 { 0%, 63% { opacity:0; transform:translateY(24px); } 67%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  #b1 { animation-name:boxIn1; } #b2 { animation-name:boxIn2; } #b3 { animation-name:boxIn3; } #b4 { animation-name:boxIn4; }
+  @keyframes ar1 { 0%, 18% { opacity:0; transform:translateX(-14px); } 21%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  @keyframes ar2 { 0%, 40% { opacity:0; transform:translateX(-14px); } 43%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  @keyframes ar3 { 0%, 60% { opacity:0; transform:translateX(-14px); } 63%, 92% { opacity:1; transform:none; } 98%, 100% { opacity:0; } }
+  #a1 { animation-name:ar1; } #a2 { animation-name:ar2; } #a3 { animation-name:ar3; }
+
+  /* 1: files get picked */
+  @keyframes pick1 { 0%, 8% { opacity:0; transform:translateY(10px); } 10%, 100% { opacity:1; transform:none; } }
+  @keyframes pick2 { 0%, 10% { opacity:0; transform:translateY(10px); } 12%, 100% { opacity:1; transform:none; } }
+  @keyframes pick3 { 0%, 12% { opacity:0; transform:translateY(10px); } 14%, 100% { opacity:1; transform:none; } }
+  @keyframes ck { 0%, 15% { transform:scale(0); } 17%, 100% { transform:scale(1); } }
+  #p1 { animation-name:pick1; } #p2 { animation-name:pick2; } #p3 { animation-name:pick3; }
+  .f .ck.a { animation-name:ck; }
+
+  /* 2: password, key, scrambled name */
+  @keyframes dots { 0%, 26% { clip-path:inset(0 100% 0 0); } 31%, 100% { clip-path:inset(0 0 0 0); } }
+  #dots { animation-name:dots; animation-timing-function:steps(8, end); }
+  @keyframes keyIn { 0%, 31% { opacity:0; transform:scale(.4) rotate(-40deg); } 34%, 100% { opacity:1; transform:none; } }
+  .key.a { animation-name:keyIn; }
+  @keyframes plainOut { 0%, 34% { opacity:1; } 37%, 100% { opacity:0; } }
+  @keyframes encIn { 0%, 35% { opacity:0; } 38%, 100% { opacity:1; } }
+  #plain { animation-name:plainOut; } #enc { animation-name:encIn; color:var(--signal); }
+
+  /* 3: original deleted by you */
+  @keyframes strike { 0%, 50% { stroke-dashoffset:200; } 54%, 100% { stroke-dashoffset:0; } }
+  .strike path { stroke-dasharray:200; animation:strike 10s linear 1 both; }
+  @keyframes fadeTile { 0%, 54% { opacity:1; } 58%, 100% { opacity:.35; } }
+  .tile.a { animation-name:fadeTile; }
+  @keyframes binIn { 0%, 54% { opacity:0; } 57%, 100% { opacity:1; } }
+  .bin.a { animation-name:binIn; }
+
+  /* 4: opens in the app */
+  @keyframes rowOn { 0%, 70% { border-color:#272C36; color:#F5F7FA; } 73%, 100% { border-color:#C8F751; color:#C8F751; } }
+  .ph .r.a { animation-name:rowOn; }
+  @keyframes peek { 0%, 74% { opacity:0; transform:scale(.6); } 78%, 100% { opacity:1; transform:none; } }
+  .peek.a { animation-name:peek; }
+  .peek { position:absolute; right:10px; bottom:10px; width:58px; height:44px; border-radius:6px; background:linear-gradient(180deg,#5d7bb0 0%,#e7a17e 55%,#6c5f86 56%,#3b3f5a 100%); border:2px solid var(--signal); }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="top"><h1>From open file to <mark>locked</mark> file</h1><span class="cap">Illustration</span></div>
+
+  <div class="box a" id="b1">
+    <span class="n">1</span><h3>Pick files</h3>
+    <div class="vis">
+      <div class="f a" id="p1" style="top:14px">KTP_contoh.pdf<span class="ck a"></span></div>
+      <div class="f a" id="p2" style="top:64px">Kontrak_sewa.pdf<span class="ck a"></span></div>
+      <div class="f a" id="p3" style="top:114px">Sertifikat_rumah_scan.pdf<span class="ck a"></span></div>
+    </div>
+    <p>Open a vault, tap Add files, and pick one or more.</p>
+  </div>
+
+  <div class="box a" id="b2">
+    <span class="n">2</span><h3>Encrypted on the way in</h3>
+    <div class="vis dark">
+      <div class="pw"><span class="a" id="dots" style="display:inline-block">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span></div>
+      <svg class="key a" viewBox="0 0 24 24" fill="none" stroke="#C8F751" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg>
+      <div class="scr"><span class="a" id="plain">KTP_contoh.pdf</span><span class="a" id="enc">e41a0c8f-77d3.enc</span></div>
+    </div>
+    <p>A key from your vault password guards it. The name is encrypted too.</p>
+  </div>
+
+  <div class="box a" id="b3">
+    <span class="n">3</span><h3>Delete the originals</h3>
+    <div class="vis">
+      <div class="tile a"><i class="b"></i><i></i><i style="width:70%"></i><div class="nm">KTP_contoh.pdf</div></div>
+      <svg class="strike" viewBox="0 0 140 112" fill="none"><path d="M10 10 L130 102 M130 10 L10 102" stroke="#E5484D" stroke-width="7" stroke-linecap="round"/></svg>
+      <div class="bin a">deleted by you</div>
+    </div>
+    <p>Adding a file copies it. The original stays in your gallery until you delete it.</p>
+  </div>
+
+  <div class="box a" id="b4">
+    <span class="n">4</span><h3>Open inside the app</h3>
+    <div class="vis">
+      <div class="ph"><div class="t">Dokumen penting</div><span class="lock">Lock</span>
+        <div class="r a">KTP_contoh.pdf</div><div class="r">Kontrak_sewa.pdf</div><div class="r">Sertifikat_rumah_scan.pdf</div>
+      </div>
+          </div>
+    <p>Photos, text, video and audio open in the vault. It locks 30 s after you switch away.</p>
+  </div>
+
+  <div class="arrow a" id="a1"><svg width="34" height="10"><path d="M0 5 H26 M20 -2 L30 5 L20 12" stroke="#072B27" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="arrow a" id="a2"><svg width="34" height="10"><path d="M0 5 H26 M20 -2 L30 5 L20 12" stroke="#072B27" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="arrow a" id="a3"><svg width="34" height="10"><path d="M0 5 H26 M20 -2 L30 5 L20 12" stroke="#072B27" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</body>
+</html>
